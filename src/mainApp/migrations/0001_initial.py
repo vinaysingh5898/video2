@@ -15,9 +15,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Book',
             fields=[
-                ('id', models.AutoField(auto_created=True, serialize=False, primary_key=True, verbose_name='ID')),
-                ('Title', models.CharField(null=True, max_length=120)),
-                ('Authors', models.CharField(null=True, max_length=120)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('Title', models.CharField(max_length=120, null=True)),
+                ('Authors', models.CharField(max_length=120, null=True)),
                 ('Updated_at', models.DateTimeField(auto_now=True)),
                 ('Created_at', models.DateTimeField(auto_now_add=True)),
             ],
@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Cart',
             fields=[
-                ('id', models.AutoField(auto_created=True, serialize=False, primary_key=True, verbose_name='ID')),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
                 ('BookId', models.ForeignKey(to='mainApp.Book')),
                 ('UserId', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
@@ -33,11 +33,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='UserInfo',
             fields=[
-                ('id', models.AutoField(auto_created=True, serialize=False, primary_key=True, verbose_name='ID')),
-                ('PriPhone', models.DecimalField(max_digits=10, decimal_places=False)),
-                ('City', models.CharField(max_length=500, default='')),
-                ('State', models.CharField(max_length=500, default='')),
-                ('Country', models.CharField(max_length=500, default='')),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('PriPhone', models.DecimalField(decimal_places=False, max_digits=10)),
+                ('City', models.CharField(default='', max_length=500, blank=True)),
+                ('State', models.CharField(default='', max_length=500, blank=True)),
+                ('Country', models.CharField(default='', max_length=500, blank=True)),
                 ('Updated_at', models.DateTimeField(auto_now=True)),
                 ('Created_at', models.DateTimeField(auto_now_add=True)),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),

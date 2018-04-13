@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^registration/$','mainApp.views.registration',name='registration'),
     url(r'^login/$','mainApp.views.login_function',name='login'),
+    url(r'^$','mainApp.views.login_function',name='login'),
     url(r'^show_data/$','mainApp.views.show_data',name='show_data'),
     url(r'^add-to-cart/(?P<Book_id>\d+)','mainApp.views.addToCart',name='add-to-cart'),
     url(r'^chatroom/(?P<Uname>\w+)','mainApp.views.chatroom',name='chatroom'),

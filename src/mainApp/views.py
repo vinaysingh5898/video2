@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .forms import *
 from .models import *
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseRedirect
 from django.db.models import Q
 
@@ -10,6 +11,8 @@ from django.contrib.auth import (
 	login,
 	logout,
 	)
+
+
 
 
 # Create your views here.
@@ -23,8 +26,19 @@ def login_function(request):
 		user=authenticate(username=username,password=password)
 		login(request,user)
 	if request.user.is_authenticated():
-		users=User.objects.filter(~Q(username=request.user.username))
-		#print(request.user.username)
+		users_list=User.objects.filter(~Q(username=request.user.username))
+
+		paginator = Paginator(users_list, 10) # Show 25 contacts per page
+
+		page = request.GET.get('page')
+
+		try:
+			users = paginator.page(page)
+		except PageNotAnInteger:
+			users = paginator.page(1)
+		except EmptyPage:
+			users = paginator.page(paginator.num_pages)
+
 		src1='"https://tokbox.com/embed/embed/ot-embed.js?embedId=d093d3aa-342a-4f78-9f6e-3f4f7e59dda4&room='
 		src=src1+request.user.username+'"'
 		print(src)
@@ -50,8 +64,19 @@ def registration(request):
 		t=userprofile.save()
 
 	if(request.user.is_authenticated()):
-		users=User.objects.filter(~Q(username=request.user.username))
-		#print(request.user.username)
+		users_list=User.objects.filter(~Q(username=request.user.username))
+
+		paginator = Paginator(users_list, 10) # Show 25 contacts per page
+
+		page = request.GET.get('page')
+
+		try:
+			users = paginator.page(page)
+		except PageNotAnInteger:
+			users = paginator.page(1)
+		except EmptyPage:
+			users = paginator.page(paginator.num_pages)
+
 		src1='"https://tokbox.com/embed/embed/ot-embed.js?embedId=d093d3aa-342a-4f78-9f6e-3f4f7e59dda4&room='
 		src=src1+request.user.username+'"'
 		print(src)
@@ -85,17 +110,30 @@ def addToCart(request,Book_id=None):
 
 
 def show_data(request):
+	form=LoginForm(request.POST or None)
 	if(request.user.is_authenticated()):
-		book=Book.objects.filter()
-		return render(request,"show.html",{"book":book})
-	return render(request,"registration.html",context)
+		return render(request,"show.html",{})
+	return render(request,"login.html",{"form":form})
 
 def chatroom(request,Uname=None):
+	form=LoginForm(request.POST or None)
 	if request.user.is_authenticated():
-		users=User.objects.filter(~Q(username=request.user.username))
-		print(type(users))
+		users_list=User.objects.filter(~Q(username=request.user.username))
+
+		paginator = Paginator(users_list, 10) # Show 25 contacts per page
+
+		page = request.GET.get('page')
+
+		try:
+			users = paginator.page(page)
+		except PageNotAnInteger:
+			users = paginator.page(1)
+		except EmptyPage:
+			users = paginator.page(paginator.num_pages)
+
+
 		src1='"https://tokbox.com/embed/embed/ot-embed.js?embedId=d093d3aa-342a-4f78-9f6e-3f4f7e59dda4&room='
 		src=src1+Uname+'"'
 		#print(src)
 		return render(request,"check.html",{"users":users,"src":src})
-	return render(request,"login.html",{})
+	return render(request,"login.html",{"form":form})
